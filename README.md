@@ -1,3 +1,10 @@
+# forked from 
+
+https://www.npmjs.com/package/openapi-typescript-validator
+
+
+
+
 # openapi-typescript-validator
 Generate typescript with `ajv >= 8.0.0` validation based on openapi schemas
 
