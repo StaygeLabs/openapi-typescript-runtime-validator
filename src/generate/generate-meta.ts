@@ -1,21 +1,28 @@
-import { format, Options } from "prettier";
-import { mkdirSync, writeFileSync } from "fs";
-import path from "path";
+import { format, Options } from 'prettier';
+import { mkdirSync, writeFileSync } from 'fs';
+import path from 'path';
 
 export function generateMetaFile(
   definitionNames: string[],
   outDirs: string[],
   prettierOptions: Options
 ): void {
+  const definitionNamesCap = definitionNames.map((definitionName) => {
+    return definitionName.charAt(0).toUpperCase() + definitionName.slice(1);
+  });
   const metas = definitionNames
     .map((definitionName) => {
-      return `${definitionName}: info<${definitionName}>('${definitionName}', '#/definitions/${definitionName}'),`;
+      const definitionNameD =
+        definitionName.charAt(0).toUpperCase() + definitionName.slice(1);
+      return `${definitionName}: info<${definitionNameD}>('${definitionName}', '#/definitions/${definitionName}'),`;
     })
-    .join("\n");
+    .join('\n');
+
+  // console.log('metas = ', metas);
 
   const rawOutput = metaTemplate
     .replace(/\$Definitions/g, metas)
-    .replace(/\$ModelImports/g, definitionNames.join(", "))
+    .replace(/\$ModelImports/g, definitionNamesCap.join(', '));
 
   const output = format(rawOutput, prettierOptions);
 

@@ -1,8 +1,8 @@
-import { format, Options } from "prettier";
-import { mkdirSync, writeFileSync } from "fs";
-import path from "path";
-import { createDecoderName } from "./generation-utils";
-import { FormatsPluginOptions } from "ajv-formats";
+import { format, Options } from 'prettier';
+import { mkdirSync, writeFileSync } from 'fs';
+import path from 'path';
+import { createDecoderName } from './generation-utils';
+import { FormatsPluginOptions } from 'ajv-formats';
 
 export function generateCompileBasedDecoders(
   definitionNames: string[],
@@ -11,29 +11,35 @@ export function generateCompileBasedDecoders(
   outDirs: string[],
   prettierOptions: Options
 ): void {
+  const definitionNamesCap = definitionNames.map((definitionName) => {
+    return definitionName.charAt(0).toUpperCase() + definitionName.slice(1);
+  });
+
   const decoders = definitionNames
-    .map((definitionName) =>
-      decoderTemplate
+    .map((definitionName) => {
+      const definitionNameD =
+        definitionName.charAt(0).toUpperCase() + definitionName.slice(1);
+      return decoderTemplate
         .replace(/\$DecoderName/g, createDecoderName(definitionName))
-        .replace(/\$Class/g, definitionName)
-        .trim()
-    )
-    .join("\n");
+        .replace(/\$Class/g, definitionNameD)
+        .trim();
+    })
+    .join('\n');
 
   const rawDecoderOutput = decodersFileTemplate
     .replace(
       /\$Imports/g,
-      addFormats ? 'import addFormats from "ajv-formats"' : ""
+      addFormats ? 'import addFormats from "ajv-formats"' : ''
     )
     .replace(
       /\$Formats/g,
       addFormats
         ? `addFormats(ajv, ${
-            formatOptions ? JSON.stringify(formatOptions) : "undefined"
+            formatOptions ? JSON.stringify(formatOptions) : 'undefined'
           });`
-        : ""
+        : ''
     )
-    .replace(/\$ModelImports/g, definitionNames.join(", "))
+    .replace(/\$ModelImports/g, definitionNamesCap.join(', '))
     .replace(/\$Decoders/g, decoders);
 
   const decoderOutput = format(rawDecoderOutput, prettierOptions);
@@ -55,7 +61,7 @@ import { validateJson } from './validate';
 import { $ModelImports } from './models';
 import jsonSchema from './schema.json';
 
-const ajv = new Ajv({ strict: false });
+const ajv = new Ajv(/*{ strict: false }*/);
 ajv.compile(jsonSchema);
 $Formats
 

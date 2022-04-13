@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from 'fs';
 import path from 'path';
 import { compile } from 'json-schema-to-typescript';
 import { format, Options } from 'prettier';
@@ -13,12 +13,13 @@ export async function generateModels(
 ): Promise<void> {
   const compiledTypescriptModels = await compile(
     JSON.parse(schema.json),
-    "Schema"
+    'Schema'
   );
+  // console.log('compiledTypescriptModels= ', compiledTypescriptModels);
   const rawTypescriptModels = modelsFileTemplate
     .replace(/\$Models/g, compiledTypescriptModels)
-    .replace(/\s*\[k: string\]: unknown;/g, "") // Allow additional properties in schema but not in typescript
-    .replace(/export interface Schema \{[^]*?\n\}/, "");
+    .replace(/\s*\[k: string\]: unknown;/g, '') // Allow additional properties in schema but not in typescript
+    .replace(/export interface Schema \{[^]*?\n\}/, '');
 
   const typescriptModels = format(rawTypescriptModels, prettierOptions);
 

@@ -1,22 +1,22 @@
-import keyby from "lodash.keyby";
-import { parseSchema } from "./parse-schema";
-import { GenerateOptions } from "./GenerateOptions";
-import { generateMetaFile } from "./generate/generate-meta";
-import { generateCompileBasedDecoders } from "./generate/generate-compile-decoders";
+import keyby from 'lodash.keyby';
+import { parseSchema } from './parse-schema';
+import { GenerateOptions } from './GenerateOptions';
+import { generateMetaFile } from './generate/generate-meta';
+import { generateCompileBasedDecoders } from './generate/generate-compile-decoders';
 import {
   generateStandaloneDecoders,
   generateStandaloneMergedDecoders,
-} from "./generate/generate-standalone-decoders";
-import { generateHelpers } from "./generate/generate-helpers";
-import { generateModels } from "./generate/generate-models";
-import { generateAjvValidator } from "./generate/generate-ajv-validator";
+} from './generate/generate-standalone-decoders';
+import { generateHelpers } from './generate/generate-helpers';
+import { generateModels } from './generate/generate-models';
+import { generateAjvValidator } from './generate/generate-ajv-validator';
 
 export async function generate(options: GenerateOptions) {
   const { schemaFile, schemaType } = options;
-  const prettierOptions = options.prettierOptions ?? { parser: "typescript" };
+  const prettierOptions = options.prettierOptions ?? { parser: 'typescript' };
 
   const directories: string[] =
-    typeof options.directory === "string"
+    typeof options.directory === 'string'
       ? [options.directory]
       : options.directory;
 
@@ -25,6 +25,8 @@ export async function generate(options: GenerateOptions) {
   );
 
   const schema = await parseSchema(schemaFile, schemaType);
+
+  // console.log('2341234 schema.definitions = ', schema.definitions);
 
   const allDefinitions = Object.keys(schema.definitions);
 
