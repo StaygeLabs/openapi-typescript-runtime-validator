@@ -21,6 +21,7 @@ export function generateCompileBasedDecoders(
         definitionName.charAt(0).toUpperCase() + definitionName.slice(1);
       return decoderTemplate
         .replace(/\$DecoderName/g, createDecoderName(definitionName))
+        .replace(/\$ClassSmall/g, definitionName)
         .replace(/\$Class/g, definitionNameD)
         .trim();
     })
@@ -72,7 +73,7 @@ $Decoders
 const decoderTemplate = `
 export const $DecoderName: Decoder<$Class> = {
   definitionName: '$Class',
-  schemaRef: '#/definitions/$Class',
+  schemaRef: '#/definitions/$ClassSmall',
 
   decode(json: unknown): $Class {
     const schema = ajv.getSchema($DecoderName.schemaRef);
